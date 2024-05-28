@@ -16,12 +16,17 @@ pygame.display.set_caption("Kick!")
 size = (725, 363)
 screen = pygame.display.set_mode(size)
 
+x = 328
+y = 160
+
 plain = pygame.image.load("title.png")
 bg = pygame.image.load("map.png")
-b = Ball(328, 160)
+b = Ball(x, y)
 p1 = Player_1(50, 150)
 p2 = Player_2(600, 150)
 # render the text for later
+
+
 
 display_intro = big_font.render("Welcome to Kick!", True, (120,81, 169))
 display_intro2 = intro_font.render("Score goals against your opponent to win.", True, (255, 255, 255))
@@ -50,11 +55,12 @@ while run:
           p1.move_direction("right")
         if keys[pygame.K_a]:
           p1.move_direction("left")
+          pygame.transform.flip(p1.image, True, False)
         if keys[pygame.K_w]:
           p1.move_direction("up")
         if keys[pygame.K_s]:
           p1.move_direction("down")
-          
+
 
         if keys[pygame.K_RIGHT]:
           p2.move_direction("right")
@@ -68,12 +74,14 @@ while run:
         if p1.rect.colliderect(b.rect):
           message = "Collision detected"
           display_message = my_font.render(message, True, (255, 255, 255))
+          b.set_location(x + 10, y + 10)
         else:
           message = "Collision not detected"
           display_message = my_font.render(message, True, (255, 255, 255))
         if p2.rect.colliderect(b.rect):
           message = "Collision detected"
           display_message = my_font.render(message, True, (255, 255, 255))
+          b.set_location(x + 10, y + 10)
         else:
           message = "Collision not detected"
           display_message = my_font.render(message, True, (255, 255, 255))
