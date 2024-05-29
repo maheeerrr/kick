@@ -35,7 +35,7 @@ display_intro4 = intro_font.render("Click anywhere to start.", True, (255, 255, 
 
 display_end = big_font.render("Game Over!", True, (255, 0, 0))
 
-start_time = time.time() + 10
+start_time = time.time() + 120
 seconds = time.time()
 display_string = "Timer: " + str(seconds) + "s"
 display_seconds = my_font.render(display_string, True, (0, 0, 0))
@@ -47,6 +47,7 @@ display_message = my_font.render(message, True, (255, 255, 255))
 run = True
 game_start = False
 game_over = False
+collision = False
 # -------- Main Program Loop -----------
 while run:
     if not game_over and game_start:
@@ -72,19 +73,17 @@ while run:
           p2.move_direction("down")
 
         if p1.rect.colliderect(b.rect):
-          message = "Collision detected"
-          display_message = my_font.render(message, True, (255, 255, 255))
-          b.set_location(x + 10, y + 10)
+          collision = True
         else:
-          message = "Collision not detected"
-          display_message = my_font.render(message, True, (255, 255, 255))
+          collision = False
         if p2.rect.colliderect(b.rect):
-          message = "Collision detected"
-          display_message = my_font.render(message, True, (255, 255, 255))
-          b.set_location(x + 10, y + 10)
+          collision = True
         else:
-          message = "Collision not detected"
-          display_message = my_font.render(message, True, (255, 255, 255))
+          collision = False
+
+        if collision:
+          b.set_location(x - 10, y - 10)
+          collision = False
             
     if not game_over and game_start:
         current_time = time.time()
