@@ -48,6 +48,7 @@ run = True
 game_start = False
 game_over = False
 collision = False
+counter = 0
 # -------- Main Program Loop -----------
 while run:
     if not game_over and game_start:
@@ -72,18 +73,11 @@ while run:
         if keys[pygame.K_DOWN]:
           p2.move_direction("down")
 
-        if p1.rect.colliderect(b.rect):
-          collision = True
-        else:
-          collision = False
-        if p2.rect.colliderect(b.rect):
-          collision = True
-        else:
-          collision = False
+        p1.detect_collision(b)
+        p2.detect_collision(b)
 
-        if collision:
-          b.set_location(x - 10, y - 10)
-          collision = False
+        b.move()
+        b.update_velocity()
             
     if not game_over and game_start:
         current_time = time.time()
@@ -99,9 +93,10 @@ while run:
             run = False
           if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             game_start = True
-            start_time = time.time() + 120
-            
-            
+            counter += 1
+            if counter == 1:
+              start_time = time.time() + 120
+              
     if not game_start or not game_over:
         screen.blit(plain, (0, 0))
         screen.blit(display_intro, (200, 100))
