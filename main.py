@@ -16,17 +16,14 @@ pygame.display.set_caption("Kick!")
 size = (725, 363)
 screen = pygame.display.set_mode(size)
 
-x = 328
-y = 160
-
 plain = pygame.image.load("title.png")
 bg = pygame.image.load("map.png")
-b = Ball(x, y)
+b = Ball(340, 175, 20)
 p1 = Player_1(50, 150)
 p2 = Player_2(600, 150)
 # render the text for later
 
-
+BALL_RADIUS = 20
 
 display_intro = big_font.render("Welcome to Kick!", True, (120,81, 169))
 display_intro2 = intro_font.render("Score goals against your opponent to win.", True, (255, 255, 255))
@@ -78,6 +75,8 @@ while run:
 
         b.move()
         b.update_velocity()
+
+        b.check_collision_with_walls(725, 363)
             
     if not game_over and game_start:
         current_time = time.time()
@@ -105,7 +104,7 @@ while run:
         screen.blit(display_intro4, (200, 220))
     if game_start and not game_over:
         screen.blit(bg, (0, 0))
-        screen.blit(b.image, b.rect)
+        b.draw(screen)
         screen.blit(p1.image, p1.rect)
         screen.blit(p2.image, p2.rect)
         screen.blit(display_seconds, (0, 0))
