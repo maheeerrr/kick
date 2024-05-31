@@ -15,26 +15,33 @@ class Player_1:
         self.delta = 3
         self.width = self.image_size[0]
         self.height = self.image_size[1]
-
+        
     def move_direction(self, direction):
+        angles = {
+            "right": 270,
+            "left": 90,
+            "up": 0,
+            "down": 180
+        }
+
         if direction == "right" and self.x < 725 - 32:
             self.x = self.x + self.delta
-        self.rect = pygame.Rect(self.x, self.y, self.image_size[0], self.image_size[1])
-        if direction == "left" and self.x > 0 - 32:
+        elif direction == "left" and self.x > 0 - 32:
             self.x = self.x - self.delta
-        self.rect = pygame.Rect(self.x, self.y, self.image_size[0], self.image_size[1])
-        if direction == "up" and self.y > 0 - 32:
+        elif direction == "up" and self.y > 0 - 32:
             self.y = self.y - self.delta
-        self.rect = pygame.Rect(self.x, self.y, self.image_size[0], self.image_size[1])
-        if direction == "down" and self.y < 363 - 32:
+        elif direction == "down" and self.y < 363 - 32:
             self.y = self.y + self.delta
+
+        self.image = pygame.transform.rotate(self.image, angles[direction])
         self.rect = pygame.Rect(self.x, self.y, self.image_size[0], self.image_size[1])
+
 
     def detect_collision(self, ball):
         if (self.x < ball.x < self.x + self.width and
             self.y < ball.y < self.y + self.height):
-            if ball.start_time is None:  # Start ball movement if not already moving
-                # Determine direction based on where the sprite makes contact with the ball
-                dx = (ball.x - (self.x + self.width / 2))
-                dy = (ball.y - (self.y + self.height / 2))
-                ball.start_moving((dx, dy))
+            # Determine direction based on where the sprite makes contact with the ball
+            dx = (ball.x - (self.x + self.width / 2))
+            dy = (ball.y - (self.y + self.height / 2))
+            ball.start_moving((dx, dy))
+
