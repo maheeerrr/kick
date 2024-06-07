@@ -7,16 +7,15 @@ from player_2 import Player_2
 # set up pygame modules
 pygame.init()
 pygame.font.init()
-intro_font = pygame.font.SysFont('Arial', 30)
-big_font = pygame.font.SysFont('Comic Sans', 60)
+intro_font = pygame.font.SysFont('Arial', 60)
+big_font = pygame.font.SysFont('Comic Sans', 120)
 my_font = pygame.font.SysFont('Arial', 15)
 pygame.display.set_caption("Kick!")
 
 # set up variables for the display
-size = (725, 363)
+size = (1661, 1000)
 screen = pygame.display.set_mode(size)
 
-plain = pygame.image.load("title.png")
 bg = pygame.image.load("map.png")
 b = Ball(340, 175, 20)
 p1 = Player_1(50, 150)
@@ -26,9 +25,9 @@ p2 = Player_2(600, 150)
 BALL_RADIUS = 20
 
 display_intro = big_font.render("Welcome to Kick!", True, (120,81, 169))
-display_intro2 = intro_font.render("Score goals against your opponent to win.", True, (255, 255, 255))
-display_intro3 = intro_font.render("Try to get a high score!", True, (255, 255, 255))
-display_intro4 = intro_font.render("Click anywhere to start.", True, (255, 255, 255))
+display_intro2 = intro_font.render("Score goals against your opponent to win.", True, (0, 0, 0))
+display_intro3 = intro_font.render("Try to get a high score!", True, (0, 0, 0))
+display_intro4 = intro_font.render("Click anywhere to start.", True, (0, 0, 0))
 
 display_end = big_font.render("Game Over!", True, (255, 0, 0))
 
@@ -54,7 +53,6 @@ while run:
           p1.move_direction("right")
         if keys[pygame.K_a]:
           p1.move_direction("left")
-          pygame.transform.flip(p1.image, True, False)
         if keys[pygame.K_w]:
           p1.move_direction("up")
         if keys[pygame.K_s]:
@@ -97,11 +95,11 @@ while run:
               start_time = time.time() + 120
               
     if not game_start or not game_over:
-        screen.blit(plain, (0, 0))
-        screen.blit(display_intro, (200, 100))
-        screen.blit(display_intro2, (50, 150))
-        screen.blit(display_intro3, (200, 185))
-        screen.blit(display_intro4, (200, 220))
+        screen.fill((255, 255, 255))
+        screen.blit(display_intro, (600, 250))
+        screen.blit(display_intro2, (620, 350))
+        screen.blit(display_intro3, (650, 380))
+        screen.blit(display_intro4, (620, 410))
     if game_start and not game_over:
         screen.blit(bg, (0, 0))
         b.draw(screen)
@@ -110,7 +108,7 @@ while run:
         screen.blit(display_seconds, (0, 0))
         screen.blit(display_message, (0, 15))
     if not game_start and game_over:
-        screen.blit(plain, (0, 0))
+        screen.fill((255, 255, 255))
         screen.blit(display_end, (240, 100))
         
     pygame.display.update()
