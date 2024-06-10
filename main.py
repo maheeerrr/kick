@@ -100,7 +100,7 @@ def reset_game():
     score_counted_p2 = False
     counter = 0
     goal_display_timer = 60
-    start_time = time.time() + 1
+    start_time = time.time() + 120
 
 # -------- Main Program Loop -----------
 while run:
@@ -214,18 +214,18 @@ while run:
 
     if not game_start and game_over:
         screen.fill((255, 255, 255))
-        screen.blit(display_end, (575, 300))
-        big_score = title_font.render("Player 1 " + str(p1_score) + " - " + str(p2_score) + " Player 2", True,
+        screen.blit(display_end, (600, 300))
+        big_score = title_font.render("Player 1   " + str(p1_score) + " - " + str(p2_score) + "   Player 2", True,
                                       (120, 81, 169))  # Update big_score
-        screen.blit(big_score, (200, 425))  # Use updated big_score
+        screen.blit(big_score, (325, 425))  # Use updated big_score
         if p1_score > p2_score:
-            screen.blit(display_p1_win, (500, 600))
+            screen.blit(display_p1_win, (575, 550))
         if p1_score < p2_score:
-            screen.blit(display_p2_win, (500, 600))  # Correct display_p2_win
+            screen.blit(display_p2_win, (575, 550))  # Correct display_p2_win
         if p1_score == p2_score:
-            screen.blit(display_tie, (500, 600))
+            screen.blit(display_tie, (675, 550))
         display_restart = text_font.render("Press Space to Restart", True, (0, 0, 0))
-        screen.blit(display_restart, (575, 800))  # Add message to restart game
+        screen.blit(display_restart, (750, 800))  # Add message to restart game
 
     pygame.display.update()
 
