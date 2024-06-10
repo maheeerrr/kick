@@ -4,22 +4,23 @@ import time
 BALL_ACTIVE_DURATION = .1
 
 class Ball:
-    def __init__(self, x, y, radius):
+    def __init__(self, x, y, radius, image_path):
         self.x = x
         self.y = y
         self.radius = radius
         self.velocity_x = 0
         self.velocity_y = 0
         self.start_time = None
-
+        self.image = pygame.image.load("ball.png")
+        self.image = pygame.transform.scale(self.image, (radius * 2, radius * 2))
     def move(self):
         self.x += self.velocity_x
         self.y += self.velocity_y
 
     def check_collision_with_walls(self, screen_width, screen_height):
-        if self.x - self.radius <= 0 or self.x + self.radius >= screen_width:
+        if self.x - self.radius <= 50 or self.x + self.radius >= 1565:
             self.velocity_x = -self.velocity_x
-        if self.y - self.radius <= 0 or self.y + self.radius >= screen_height:
+        if self.y - self.radius <= 25 or self.y + self.radius >= 950:
             self.velocity_y = -self.velocity_y
 
     def start_moving(self, direction):
@@ -38,4 +39,9 @@ class Ball:
                 self.velocity_y *= slow_down_factor
 
     def draw(self, surface):
-        pygame.draw.circle(surface, (255, 255, 255), (int(self.x), int(self.y)), self.radius)
+        ball_rect = self.image.get_rect(center=(int(self.x), int(self.y)))
+        surface.blit(self.image, ball_rect.topleft)
+
+    def stop(self):
+        self.velocity_x = 0
+        self.velocity_y = 0
