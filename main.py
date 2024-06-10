@@ -23,9 +23,8 @@ screen = pygame.display.set_mode(size)
 bg = pygame.image.load("map.png")
 p1 = Player_1(75, 475)
 p2 = Player_2(1500, 475)
+
 # render the text for later
-
-
 BALL_RADIUS = 10
 ball_image_path = "ball.png"  # Path to your ball image file
 b = Ball(1661 // 2 - 5, 1000 // 2, BALL_RADIUS, ball_image_path)
@@ -86,6 +85,23 @@ score_counted_p1 = False
 score_counted_p2 = False
 counter = 0
 goal_display_timer = 60
+
+def reset_game():
+    global p1, p2, b, p1_score, p2_score, game_start, game_over, movement_stopped, score_counted_p1, score_counted_p2, start_time, counter, goal_display_timer
+    p1 = Player_1(75, 475)
+    p2 = Player_2(1500, 475)
+    b = Ball(1661 // 2 - 5, 1000 // 2, BALL_RADIUS, ball_image_path)
+    p1_score = 0
+    p2_score = 0
+    game_start = False
+    game_over = False
+    movement_stopped = False
+    score_counted_p1 = False
+    score_counted_p2 = False
+    counter = 0
+    goal_display_timer = 60
+    start_time = time.time() + 1
+
 # -------- Main Program Loop -----------
 while run:
     if not game_over and game_start:
@@ -121,25 +137,25 @@ while run:
             score_counted_p1 = True  # Set the flag to prevent further incrementing
             score_counted_p2 = False  # Ensure Player 2's flag is reset
             p1_score += 1
+            big_score = title_font.render("Player 1  " + str(p1_score) + " - " + str(p2_score) + "  Player 2", True,
+                                          (120, 81, 169))  # Update big_score
         b.stop()
         p1.delta = 0
         p2.delta = 0
         movement_stopped = True
-        score = title_font.render("Player 1 " + str(p1_score) + " - " + str(p2_score) + " Player 2", True,
-                                  (120, 81, 169))
     elif check_if_ball_in_target(b):
         if not score_counted_p2:  # Check if the score for Player 2 has not been counted yet
             score_counted_p2 = True  # Set the flag to prevent further incrementing
             score_counted_p1 = False  # Ensure Player 1's flag is reset
             p2_score += 1
+            big_score = title_font.render("Player 1  " + str(p1_score) + " - " + str(p2_score) + "  Player 2", True,
+                                          (120, 81, 169))  # Update big_score
         b.stop()
         p1.delta = 0
         p2.delta = 0
         movement_stopped = True
-        score = title_font.render("Player 1 " + str(p1_score) + " - " + str(p2_score) + " Player 2", True,
-                                  (120, 81, 169))
 
-        # Update the score display
+    # Update the score display
     display_score = score_font.render("P1 " + str(p1_score) + " : " + str(p2_score) + " P2", True, (255, 255, 255))
 
     if not game_over and game_start:
@@ -154,11 +170,14 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:  # If user clicked close
             run = False
-        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1 and not game_start:
             game_start = True
             counter += 1
             if counter == 1:
                 start_time = time.time() + 120
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and game_over:
+                reset_game()
 
     if not game_start or not game_over:
         screen.fill((255, 255, 255))
@@ -196,14 +215,20 @@ while run:
     if not game_start and game_over:
         screen.fill((255, 255, 255))
         screen.blit(display_end, (575, 300))
-        screen.blit(big_score, (200, 425))
+        big_score = title_font.render("Player 1 " + str(p1_score) + " - " + str(p2_score) + " Player 2", True,
+                                      (120, 81, 169))  # Update big_score
+        screen.blit(big_score, (200, 425))  # Use updated big_score
         if p1_score > p2_score:
             screen.blit(display_p1_win, (500, 600))
         if p1_score < p2_score:
-            screen.blit(display_p1_win, (500, 600))
+            screen.blit(display_p2_win, (500, 600))  # Correct display_p2_win
         if p1_score == p2_score:
             screen.blit(display_tie, (500, 600))
+        display_restart = text_font.render("Press Space to Restart", True, (0, 0, 0))
+        screen.blit(display_restart, (575, 800))  # Add message to restart game
+
     pygame.display.update()
 
 # Once we have exited the main program loop we can stop the game engine:
 pygame.quit()
+
