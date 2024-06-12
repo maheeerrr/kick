@@ -58,8 +58,8 @@ def check_if_ball_in_target_2(ball):
     return False
 
 display_intro = title_font.render("Welcome to Kick!", True, (120, 81, 169))
-display_intro2 = intro_font.render("Score goals against your opponent to win.", True, (0, 0, 0))
-display_intro3 = intro_font.render("Try to get a high score!", True, (0, 0, 0))
+display_intro2 = intro_font.render("Score goals against your opponent to win!", True, (0, 0, 0))
+display_intro3 = intro_font.render("WASD for Player 1. Arrow Keys for Player 2.", True, (0, 0, 0))
 display_intro4 = text_font.render("Click the button to start.", True, (99, 99, 99))
 
 button_text = text_font.render("Start Game", True, (255, 255, 255))
@@ -82,7 +82,7 @@ display_string = "Timer: " + str(seconds) + "s"
 display_seconds = timer_font.render(display_string, True, (255, 255, 255))
 display_score = score_font.render("P1 " + str(p1_score) + " : " + str(p2_score) + " P2", True, (255, 255, 255))
 
-# The loop will carry on until the user exits the game (e.g. clicks the close button).
+# loop
 run = True
 game_start = False
 game_over = False
@@ -193,7 +193,7 @@ while run:
         screen.fill((255, 255, 255))
         screen.blit(display_intro, (400, 250))
         screen.blit(display_intro2, (275, 400))
-        screen.blit(display_intro3, (500, 475))
+        screen.blit(display_intro3, (225, 475))
         screen.blit(display_intro4, (700, 700))
         pygame.draw.rect(screen, button_color, button_rect)
         screen.blit(button_text, (button_rect.x + 75, button_rect.y + 10))
@@ -240,5 +240,5 @@ while run:
 
     pygame.display.update()
 
-# Once we have exited the main program loop we can stop the game engine:
+
 pygame.quit()
