@@ -1,7 +1,7 @@
 import pygame
 import time
 
-BALL_ACTIVE_DURATION = .1
+BALL_ACTIVE_DURATION = .2
 pygame.mixer.init()
 bounce_sound = pygame.mixer.Sound("wall_ball.wav")
 
