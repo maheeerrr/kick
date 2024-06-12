@@ -2,6 +2,8 @@ import pygame
 import time
 
 BALL_ACTIVE_DURATION = .1
+pygame.mixer.init()
+bounce_sound = pygame.mixer.Sound("wall_ball.wav")
 
 class Ball:
     def __init__(self, x, y, radius, image_path):
@@ -20,8 +22,10 @@ class Ball:
     def check_collision_with_walls(self, screen_width, screen_height):
         if self.x - self.radius <= 50 or self.x + self.radius >= 1565:
             self.velocity_x = -self.velocity_x
+            bounce_sound.play()
         if self.y - self.radius <= 25 or self.y + self.radius >= 950:
             self.velocity_y = -self.velocity_y
+            bounce_sound.play()
 
     def start_moving(self, direction):
         self.velocity_x, self.velocity_y = direction

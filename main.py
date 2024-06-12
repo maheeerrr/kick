@@ -29,6 +29,12 @@ BALL_RADIUS = 10
 ball_image_path = "ball.png"  # Path to your ball image file
 b = Ball(1661 // 2 - 5, 1000 // 2, BALL_RADIUS, ball_image_path)
 
+pygame.mixer.init()
+game_start_sound = pygame.mixer.Sound("game_start.wav")
+hooray_sound = pygame.mixer.Sound("hooray.wav")
+game_over_sound = pygame.mixer.Sound("game_over.wav")
+game_over_voice = pygame.mixer.Sound("game_over_2.wav")
+
 TARGET_REGION_X = 50
 TARGET_REGION_Y = 450
 TARGET_REGION_WIDTH = 35
@@ -39,13 +45,11 @@ TARGET_REGION_Y_2 = 450
 TARGET_REGION_WIDTH_2 = 35
 TARGET_REGION_HEIGHT_2 = 100
 
-
 def check_if_ball_in_target(ball):
     if (
             TARGET_REGION_X < ball.x < TARGET_REGION_X + TARGET_REGION_WIDTH and TARGET_REGION_Y < ball.y < TARGET_REGION_Y + TARGET_REGION_HEIGHT):
         return True
     return False
-
 
 def check_if_ball_in_target_2(ball):
     if (
@@ -53,11 +57,14 @@ def check_if_ball_in_target_2(ball):
         return True
     return False
 
-
 display_intro = title_font.render("Welcome to Kick!", True, (120, 81, 169))
 display_intro2 = intro_font.render("Score goals against your opponent to win.", True, (0, 0, 0))
 display_intro3 = intro_font.render("Try to get a high score!", True, (0, 0, 0))
-display_intro4 = text_font.render("Click anywhere to start.", True, (99, 99, 99))
+display_intro4 = text_font.render("Click the button to start.", True, (99, 99, 99))
+
+button_text = text_font.render("Start Game", True, (255, 255, 255))
+button_color = (0, 128, 0)
+button_rect = pygame.Rect(700, 800, 300, 50)  # Define the button rectangle
 
 p1_score = 0
 p2_score = 0
@@ -171,10 +178,13 @@ while run:
         if event.type == pygame.QUIT:  # If user clicked close
             run = False
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1 and not game_start:
-            game_start = True
-            counter += 1
-            if counter == 1:
-                start_time = time.time() + 120
+            mouse_pos = pygame.mouse.get_pos()
+            if button_rect.collidepoint(mouse_pos):  # Check if click is within button
+                game_start = True
+                game_start_sound.play()
+                counter += 1
+                if counter == 1:
+                    start_time = time.time() + 120
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and game_over:
                 reset_game()
@@ -185,6 +195,8 @@ while run:
         screen.blit(display_intro2, (275, 400))
         screen.blit(display_intro3, (500, 475))
         screen.blit(display_intro4, (700, 700))
+        pygame.draw.rect(screen, button_color, button_rect)
+        screen.blit(button_text, (button_rect.x + 75, button_rect.y + 10))
     if game_start and not game_over:
         screen.blit(bg, (0, 0))
         b.draw(screen)
@@ -192,12 +204,9 @@ while run:
         screen.blit(p2.image, p2.rect)
         screen.blit(display_seconds, (1565, 25))
         screen.blit(display_score, (1565, 40))
-        pygame.draw.rect(screen, (255, 0, 0),
-                         (TARGET_REGION_X, TARGET_REGION_Y, TARGET_REGION_WIDTH, TARGET_REGION_HEIGHT), 2)
-        pygame.draw.rect(screen, (255, 0, 0),
-                         (TARGET_REGION_X_2, TARGET_REGION_Y_2, TARGET_REGION_WIDTH_2, TARGET_REGION_HEIGHT_2), 2)
         if movement_stopped:
             if goal_display_timer > 0:
+                hooray_sound.play()
                 screen.fill((255, 255, 255))
                 screen.blit(goal, (500, 250))
                 screen.blit(big_score, (300, 400))
@@ -213,6 +222,8 @@ while run:
                 goal_display_timer = 60
 
     if not game_start and game_over:
+        game_over_sound.play()
+        game_over_voice.play()
         screen.fill((255, 255, 255))
         screen.blit(display_end, (600, 300))
         big_score = title_font.render("Player 1   " + str(p1_score) + " - " + str(p2_score) + "   Player 2", True,
@@ -231,4 +242,3 @@ while run:
 
 # Once we have exited the main program loop we can stop the game engine:
 pygame.quit()
-
